@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# VS/Build
+*.obj
+*.pdb
+*.lib
+*.exp
+*.ipdb
+.vs/
+Debug/
+Release/
+x64/
+
+# OS
+.DS_Store
+Thumbs.db
