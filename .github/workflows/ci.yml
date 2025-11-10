@@ -1,0 +1,36 @@
+name: CI (Windows)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:  # allows manual run from Actions tab
+
+jobs:
+  build-and-test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: MSVC dev cmd
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build DLL with cl
+        shell: cmd
+        run: |
+          cd csrc
+          cl /nologo /LD nvlink_sim.c /Fe:nvlink_sim.dll
+          if not exist nvlink_sim.dll ( exit /b 1 )
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest -q
